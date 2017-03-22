@@ -1,29 +1,33 @@
-import pygame, sys
+import pygame, sys, random, math, logging
 from pygame.locals import *
+from entities import *
+from pygame.math import *
+
 
 pygame.init()
 WHITE = (255, 255, 255)
+GREEN = (0, 255, 0)
+RED = (255, 0, 0)
 BLACK = (  0,   0,   0)
 FPS = 60
 fpsClock = pygame.time.Clock()
-DISPLAYSURF = pygame.display.set_mode((400, 300), 0, 32)
+DISPLAYSURF = pygame.display.set_mode((800, 600), 0, 32)
 pygame.display.set_caption('Danmaku')
 keypress = []
+enemyBullets = []
+playerBullets = []
+enemies = []
+
 for i in range(300):
     keypress.append(False)
-W = 119
-A = 97
-S = 115
-D = 100
 
-class Player():
-    def __init__(self):
-        self.w = 10
-        self.h = 10
-        self.x = 100
-        self.y = 100
+logging.basicConfig(level=logging.INFO)
 
 p1 = Player()
+p1.hitbox.x = 300;
+p1.hitbox.y = 300;
+p1.hitbox.w = 4;
+p1.hitbox.h = 2;
 
 def checkKeypress():
     for event in pygame.event.get():
@@ -35,24 +39,15 @@ def checkKeypress():
             pygame.quit()
             sys.exit()
 
-def playerMov():
-    if keypress[W]:
-        p1.y -= 1
-    if keypress[A]:
-        p1.x -= 1
-    if keypress[S]:
-        p1.y += 1
-    if keypress[D]:
-        p1.x += 1
-
 def drawPlayer():
-    pygame.draw.circle(DISPLAYSURF, BLACK, (p1.x, p1.y), p1.w, p1.h)
-
+    pygame.draw.circle(DISPLAYSURF, RED, (int(p1.hitbox.x), int(p1.hitbox.y)), p1.hitbox.w, p1.hitbox.h)
 
 while True:
     DISPLAYSURF.fill(WHITE)
-    checkKeypress()
-    playerMov()
-    drawPlayer()
-    pygame.display.update()
     fpsClock.tick(FPS)
+    checkKeypress()
+    p1.Update(keypress)
+    drawPlayer()
+
+    
+    pygame.display.update()
