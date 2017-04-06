@@ -68,7 +68,7 @@ class Bullet():
         self.y = origin.y
         self.tx = target.hitbox.x
         self.ty = target.hitbox.y
-        self.speed = 2
+        self.speed = 1.1
         self.direction = math.atan2((self.ty - self.y ), (self.tx - self.x ))
         self.dirx = math.cos(self.direction)
         self.diry = math.sin(self.direction)
