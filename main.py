@@ -16,7 +16,7 @@ totalTime = 0.0
 eSpawnTime = 0.0
 fpsClock = pygame.time.Clock()
 DISPLAYSURF = pygame.display.set_mode((800, 600), 0, 32)
-pygame.display.set_caption('Danmaku')
+pygame.display.set_caption('Nocaption')
 keypress = []
 enemyBullets = []
 playerBullets = []
@@ -58,7 +58,7 @@ def drawEnemies():
 
 def drawBullets():
     for bu in enemyBullets:
-        pygame.draw.rect(DISPLAYSURF, GREEN, (bu.x,bu.y,2,2), 2)
+        pygame.draw.rect(DISPLAYSURF, GREEN, (bu.x,bu.y,5,5), 3)
 
 def spawnEnemies(timePassed):
     spawnInterval = 2000
@@ -81,15 +81,19 @@ def updateBullets():
 
 
 while True:
-    DISPLAYSURF.fill(WHITE)
-    timePassed = fpsClock.tick(FPS)
-    totalTime += timePassed
-    spawnEnemies(timePassed)
-    checkKeypress()
-    p1.Update(keypress, timePassed)
-    updateEnemies()
-    updateBullets()
-    drawPlayer()
-    drawEnemies()
-    drawBullets()
-    pygame.display.update()
+	DISPLAYSURF.fill(WHITE)
+	timePassed = fpsClock.tick(FPS)
+	fpstime = fpsClock.get_fps()
+	fon = pygame.font.SysFont('Arial', 50)
+	surf = fon.render(str(int(fpstime)), True, BLACK)
+	DISPLAYSURF.blit(surf, (20, 20))
+	totalTime += timePassed
+	spawnEnemies(timePassed)
+	checkKeypress()
+	p1.Update(keypress, timePassed)
+	updateEnemies()
+	updateBullets()
+	drawPlayer()
+	drawEnemies()
+	drawBullets()
+	pygame.display.update()
