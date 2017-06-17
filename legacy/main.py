@@ -65,7 +65,7 @@ def spawnEnemies(timePassed):
     global eSpawnTime
     eSpawnTime += timePassed
     if eSpawnTime > spawnInterval:
-        enemies.append(Enemy(Rect(100,100,6,6),Vector2(1,0)))
+        enemies.append(Enemy(Rect(100,100,6,6),Vector2(1,-0.1)))
         eSpawnTime = 0.0
     if len(enemies) > 5:
         enemies.pop(0)
