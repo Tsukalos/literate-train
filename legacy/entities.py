@@ -38,8 +38,10 @@ class Enemy():
         self.hitbox = rect
         self.direction = direction
         self.speed = 1.2
-        self.cooldown = 500
+        self.cooldown = 250
         self.timePassed = 0.0
+        self.x = float(self.hitbox.x)
+        self.y = float(self.hitbox.y)
 
     def Update(self, enemyBullets, player, timePassed):
         self.updateMovement()
@@ -51,8 +53,10 @@ class Enemy():
 
 
     def updateMovement(self):
-        self.hitbox.x += self.direction.x*self.speed
-        self.hitbox.y += self.direction.y*self.speed
+        self.x += self.direction.x*self.speed
+        self.y += self.direction.y*self.speed
+        self.hitbox.x = self.x
+        self.hitbox.y = self.y
 
     def shootBullet(self, target, timePassed, enemyBullets):
         self.timePassed += timePassed
@@ -68,7 +72,7 @@ class Bullet():
         self.y = origin.y
         self.tx = target.hitbox.x
         self.ty = target.hitbox.y
-        self.speed = 1.1
+        self.speed = 1.5
         self.direction = math.atan2((self.ty - self.y ), (self.tx - self.x ))
         self.dirx = math.cos(self.direction)
         self.diry = math.sin(self.direction)
