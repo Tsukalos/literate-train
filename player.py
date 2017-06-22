@@ -8,13 +8,14 @@ class Player(Entity):
     def updateRect(self):
         Entity.updateRect(self)
 
-    def update(self, keypress, update_list, screen, background):
+    def update(self, keypress, update_list, screen, background, timePassed):
         self.updateMovement(keypress, update_list, screen, background)
         self.updateRect()
+        self.animation(timePassed)
         self.draw(update_list, screen)
 
     def updateMovement(self, keypress, update_list, screen, background):
-        Entity.updateMovement(self, update_list, screen, background)
+
         if keypress[119]:
             self.y -= 1
         if keypress[97]:
@@ -23,3 +24,5 @@ class Player(Entity):
             self.y += 1
         if keypress[100]:
             self.x += 1
+
+        Entity.updateMovement(self, update_list, screen, background)
