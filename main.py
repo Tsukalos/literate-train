@@ -1,7 +1,10 @@
-import pygame, sys
+import pygame, sys, json, logging
 from pygame.locals import *
 from player import *
 from entity import *
+from enemy import *
+from pprint import pprint
+
 
 pygame.init()
 FPS = 60
@@ -11,10 +14,43 @@ update_list = []
 keypress = []
 for i in range(500):
     keypress.append(False)
-p = Player(Rect(20,20,10,10),pygame.image.load("data/player.png").convert())
+
+def hook_file(dct):
+	pass
+
+with open("enemyFile.json") as f:
+	data = json.load(f)
+
+
+
+pSprite = pygame.image.load("data/sprite.png").convert()
+pSprite.set_colorkey((255,255,255))
+eSprite = pygame.image.load("data/eSprite.png").convert()
+eSprite.set_colorkey((255,255,255))
+p = Player(Rect(20,20,20,20),pSprite)
+e = Enemy(Rect(50,50,20,20),eSprite)
+p.loadSprite(pSprite,20,250) #usado p/ animation
+e.loadSprite(eSprite,20,250)
+
+e.setType(enemyType(data))
+
 background = pygame.image.load("data/background.png").convert()
-screen.blit(background, (0,0))
-pygame.display.update()
+#background.set_colorkey((255,255,255))
+
+entityList = []
+entityList.append(e)
+entityList.append(p)
+
+def entityUpdate():
+    for a in entityList:
+        a.clearBg(update_list, screen, background)
+        if type(a) == Player:
+            a.update(keypress, timePassed)
+        if type(a) == Enemy:
+            a.update(timePassed)
+    for a in entityList:
+        a.draw(update_list,screen)
+
 def event():
     for event in pygame.event.get():
         if event.type == KEYDOWN:
@@ -25,9 +61,11 @@ def event():
             pygame.quit()
             sys.exit()
 
+screen.blit(background, (0,0))
+pygame.display.update()
 while True:
-    update_list = []
-    p.update(keypress, update_list, screen, background)
-    event()
     timePassed = fpsClock.tick(FPS)
+    update_list = []
+    entityUpdate()
+    event()
     pygame.display.update(update_list)
