@@ -10,7 +10,6 @@ class Enemy(Entity):
 		self.updateMovement()
 		self.updateRect()
 		self.animation(timePassed)
-		#self.draw(update_list, screen)
 
 	def updateMovement(self):
 		pass
