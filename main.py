@@ -20,7 +20,7 @@ def hook_file(dct):
 
 with open("enemyFile.json") as f:
 	data = json.load(f)
-	
+
 
 
 pSprite = pygame.image.load("data/sprite.png").convert()
@@ -31,9 +31,25 @@ p = Player(Rect(20,20,20,20),pSprite)
 e = Enemy(Rect(50,50,20,20),eSprite)
 p.loadSprite(pSprite,20,250) #usado p/ animation
 e.loadSprite(eSprite,20,250)
+
 e.setType(enemyType(data))
+
 background = pygame.image.load("data/background.png").convert()
-background.set_colorkey((255,255,255))
+#background.set_colorkey((255,255,255))
+
+entityList = []
+entityList.append(e)
+entityList.append(p)
+
+def entityUpdate():
+    for a in entityList:
+        a.clearBg(update_list, screen, background)
+        if type(a) == Player:
+            a.update(keypress, timePassed)
+        if type(a) == Enemy:
+            a.update(timePassed)
+    for a in entityList:
+        a.draw(update_list,screen)
 
 def event():
     for event in pygame.event.get():
@@ -48,9 +64,8 @@ def event():
 screen.blit(background, (0,0))
 pygame.display.update()
 while True:
-	timePassed = fpsClock.tick(FPS)
-	update_list = []
-	e.update(update_list, screen, background, timePassed)
-	p.update(keypress, update_list, screen, background, timePassed)
-	event()
-	pygame.display.update(update_list)
+    timePassed = fpsClock.tick(FPS)
+    update_list = []
+    entityUpdate()
+    event()
+    pygame.display.update(update_list)
