@@ -9,9 +9,11 @@ class Player(Entity):
         Entity.updateRect(self)
 
     def update(self, keypress, timePassed):
+        self.timePassed+=timePassed
         self.updateMovement(keypress)
         self.updateRect()
-        self.animation(timePassed)
+        self.animation()
+        self.timePassed = 0
 
     def updateMovement(self, keypress):
 

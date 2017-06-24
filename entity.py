@@ -7,6 +7,7 @@ class Entity():
         self.rect = rect
         self.surface = surf
         self.timePassed = 0
+        self.animationTimer = 0
 
     def clearBg(self, update_list, screen, background):
         screen.blit(background,self.rect,self.rect)
@@ -26,13 +27,13 @@ class Entity():
     	self.rect.x = self.x
     	self.rect.y = self.y
 
-    def animation(self, timePassed):
-    	self.timePassed+=timePassed
-    	if(self.timePassed > self.animationTime):
-    		self.currentTile+=1
-    		if(self.currentTile == (self.surface.get_width()/self.tileSize)-1):
-    			self.currentTile = 0
-    		self.timePassed = 0
+    def animation(self):
+        self.animationTimer+=self.timePassed
+        if(self.animationTimer > self.animationTime):
+            self.currentTile+=1
+            if(self.currentTile == (self.surface.get_width()/self.tileSize)-1):
+                self.currentTile = 0
+            self.animationTimer = 0
 
     def loadSprite(self, sprite, tileSize,animationTime):
     	self.surface = sprite
