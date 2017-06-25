@@ -4,6 +4,7 @@ import pygame
 class Player(Entity):
     def __init__(self, rect, surf):
         Entity.__init__(self, rect, surf)
+        self.firing = False
 
     def updateRect(self):
         Entity.updateRect(self)
@@ -16,12 +17,16 @@ class Player(Entity):
         self.timePassed = 0
 
     def updateMovement(self, keypress):
-
-        if keypress[119]:
+        if keypress[K_w]:
             self.y -= 1
-        if keypress[97]:
+        if keypress[K_a]:
             self.x -= 1
-        if keypress[115]:
+        if keypress[K_s]:
             self.y += 1
-        if keypress[100]:
+        if keypress[K_d]:
             self.x += 1
+
+        if keypress[K_z]:
+            firing = True
+        else:
+            firing = False
