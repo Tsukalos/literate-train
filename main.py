@@ -12,8 +12,7 @@ fpsClock = pygame.time.Clock()
 screen = pygame.display.set_mode((800, 600), 0, 32)
 update_list = []
 keypress = []
-#for i in range(500):
-    #keypress.append(False)
+
 
 
 with open("enemyFile.json") as f:
@@ -52,12 +51,9 @@ def entityUpdate():
         a.draw(update_list,screen)
 
 def event():
+    global keypress
     keypress = pygame.key.get_pressed()
     for event in pygame.event.get():
-        #if event.type == KEYDOWN:
-            #keypress[event.key] = True
-        #f event.type == KEYUP:
-            #keypress[event.key] = False
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
@@ -65,7 +61,6 @@ def event():
 screen.blit(background, (0,0))
 pygame.display.update()
 while True:
-
     timePassed = fpsClock.tick(FPS)
     update_list = []
     event()
