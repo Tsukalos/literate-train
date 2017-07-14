@@ -7,7 +7,7 @@ class Line():
 		self.speed = speed
 		self.timer = 0
 		
-	def update(self, x, y):
-		x += self.direction.x*speed
-		y += self.direction.y*speed
+	def update(self, entity):
+		entity.x += self.direction.x*self.speed
+		entity.y += self.direction.y*self.speed
 		

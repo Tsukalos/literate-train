@@ -15,11 +15,6 @@ keypress = []
 
 
 
-with open("enemyFile.json") as f:
-	data = json.load(f)
-
-
-
 pSprite = pygame.image.load("data/sprite.png").convert()
 pSprite.set_colorkey((255,255,255))
 eSprite = pygame.image.load("data/eSprite2.png").convert()
@@ -29,10 +24,8 @@ e = Enemy(Rect(50,50,20,20),eSprite)
 p.loadSprite(pSprite,20,250) #usado p/ animation
 e.loadSprite(eSprite,20,250)
 
-e.setType(enemyType(data))
 
 background = pygame.image.load("data/background.png").convert()
-#background.set_colorkey((255,255,255))
 
 entityList = []
 entityList.append(e)

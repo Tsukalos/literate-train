@@ -1,12 +1,13 @@
 from entity import *
 from pygame.math import *
 import movement
+import pattern
 from collections import namedtuple
 
 class Enemy(Entity):
 	def __init__(self, rect, surf):
 		Entity.__init__(self, rect, surf)
-		self.movement = movement.Line(Vector2(1,1),1.2)
+		self.pattern = pattern.patternSquare(self)
 
 	def update(self, timePassed):
 		self.timePassed+=timePassed
@@ -16,14 +17,12 @@ class Enemy(Entity):
 		self.timePassed = 0
 
 	def updateMovement(self):
-		self.movement.update(self.x, self.y)
+		self.pattern.update(self.timePassed)
 
 	#def setType(self, Type):
 		#self.Type = Type
 
 	def updateRect(self):
-		if(self.direction != Vector2(0,0)):
-			self.direction.normalize_ip()
 		Entity.updateRect(self)
 
 class enemyType():
