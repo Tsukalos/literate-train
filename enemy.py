@@ -7,7 +7,8 @@ from collections import namedtuple
 class Enemy(Entity):
 	def __init__(self, rect, surf):
 		Entity.__init__(self, rect, surf)
-		self.pattern = pattern.patternSquare(self)
+		#self.pattern = pattern.patternSquare(self)
+		self.pattern = pattern.Pattern3(self)
 
 	def update(self, timePassed):
 		self.timePassed+=timePassed
