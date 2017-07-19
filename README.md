@@ -1,2 +1,2 @@
-# literate-train
+# pyBulletH - Bullet Hell in Python
 
