@@ -31,4 +31,5 @@ class Senoid(Pattern):
 class Pattern3(Pattern):
 	def __init__(self, entity):
 		Pattern.__init__(self, entity)
-		self.move_list = [(movement.Line(Vector2(1,1),0.3),1000),(movement.Line(Vector2(-1,1),0.72),1000)]
+		self.move_list = [
+		(movement.LineAcc(Vector2(1,0),4,-3,1),5000)]
