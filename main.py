@@ -21,8 +21,9 @@ eSprite = pygame.image.load("data/eSprite.png").convert()
 eSprite.set_colorkey((255,255,255))
 p = Player(Rect(50,50,20,20),pSprite)
 e = Enemy(Rect(50,50,20,20),eSprite)
-p.loadSprite(pSprite,20,250) #usado p/ animation
-e.loadSprite(eSprite,20,250)
+p.loadSprite(pSprite,20,250) #animation
+e.loadSprite(eSprite,20,250) #animation
+e.loadPattern(pattern.patternSquare(e))
 
 
 background = pygame.image.load("data/background.png").convert()
