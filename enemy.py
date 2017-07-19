@@ -1,13 +1,14 @@
 from entity import *
 from pygame.math import *
+import movement
+import pattern
 from collections import namedtuple
 
 class Enemy(Entity):
 	def __init__(self, rect, surf):
 		Entity.__init__(self, rect, surf)
-		self.direction = Vector2(0,0)
-		self.moveC = 0
-		self.movementTimer = 0
+		#self.pattern = pattern.patternSquare(self)
+		#self.pattern = pattern.Pattern3(self)
 
 	def update(self, timePassed):
 		self.timePassed+=timePassed
@@ -17,30 +18,17 @@ class Enemy(Entity):
 		self.timePassed = 0
 
 	def updateMovement(self):
-		self.movementTimer+=self.timePassed
-		self.currentMove = self.Type.movements[self.moveC]
-		if(self.currentMove.delay > self.movementTimer):
-			self.direction = self.currentMove.direction
-		else:
-			self.movementTimer = 0
-			if(self.moveC == len(self.Type.movements)-1):
-				self.moveC = 0
-			else:
-				self.moveC+=1
+		self.pattern.update(self.timePassed)
 
-	def setType(self, Type):
-		self.Type = Type
+	def loadPattern(self, pattern):
+		self.pattern = pattern
+
+	#def setType(self, Type):
+		#self.Type = Type
 
 	def updateRect(self):
-		self.direction.normalize_ip()
-		self.x += self.direction.x
-		self.y += self.direction.y
 		Entity.updateRect(self)
 
 class enemyType():
-	def __init__(self, data):
-		Movement = namedtuple("Movement","direction delay")
-		self.movements = []
-		self.name = data["name"]
-		for a in data['movements']:
-			self.movements.append(Movement(direction=Vector2(a['x'],a['y']),delay=a['delay']))
+	def __init__(self):
+		pass
