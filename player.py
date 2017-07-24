@@ -5,6 +5,7 @@ class Player(Entity):
     def __init__(self, rect, surf):
         Entity.__init__(self, rect, surf)
         self.firing = False
+        self.name = "Player"
 
     def updateRect(self):
         Entity.updateRect(self)

@@ -8,6 +8,7 @@ class Entity():
         self.surface = surf
         self.timePassed = 0
         self.animationTimer = 0
+        self.name = ""
 
     def clearBg(self, update_list, screen, background):
         screen.blit(background,self.rect,self.rect)

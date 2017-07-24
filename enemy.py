@@ -7,6 +7,7 @@ from collections import namedtuple
 class Enemy(Entity):
 	def __init__(self, rect, surf):
 		Entity.__init__(self, rect, surf)
+		self.name = "Enemy1"
 		#self.pattern = pattern.patternSquare(self)
 		#self.pattern = pattern.Pattern3(self)
 
