@@ -7,22 +7,22 @@ from collections import namedtuple
 class Enemy(Entity):
 	def __init__(self, rect, surf):
 		Entity.__init__(self, rect, surf)
-		self.name = "Enemy1"
 		#self.pattern = pattern.patternSquare(self)
 		#self.pattern = pattern.Pattern3(self)
 
 	def update(self, timePassed):
 		self.timePassed+=timePassed
-		self.updateMovement()
+		self.updateMovementPattern()
 		self.updateRect()
 		self.animation()
 		self.timePassed = 0
 
-	def updateMovement(self):
-		self.pattern.update(self.timePassed)
+	def updateMovementPattern(self):
+		self.movementPattern.update(self.timePassed)
 
-	def loadPattern(self, pattern):
-		self.pattern = pattern
+	def loadEnemy(self, pattern, name):
+		self.movementPattern = pattern
+		self.name = name
 
 	#def setType(self, Type):
 		#self.Type = Type
@@ -30,6 +30,3 @@ class Enemy(Entity):
 	def updateRect(self):
 		Entity.updateRect(self)
 
-class enemyType():
-	def __init__(self):
-		pass

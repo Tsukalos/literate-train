@@ -36,7 +36,7 @@ class Entity():
                 self.currentTile = 0
             self.animationTimer = 0
 
-    def loadSprite(self, sprite, tileSize,animationTime):
+    def loadSprite(self, sprite, tileSize, animationTime):
     	self.surface = sprite
     	self.animationTime = animationTime
     	self.tileSize = tileSize
