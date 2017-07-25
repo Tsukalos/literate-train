@@ -28,12 +28,12 @@ e = Enemy(Rect(50,50,20,20),eSprite)
 e2 = Enemy(Rect(50,50,20,20),eSprite)
 p.loadSprite(pSprite,20,250) #animation
 e.loadSprite(eSprite,20,250) #animation
-e2.loadSprite(eSprite,20,250)
+#e2.loadSprite(eSprite,20,250)
 
 
 
-e.loadEnemy(pattern.patternSquare(e), "Enemy1")
-e2.loadEnemy(pattern.Senoid(e2),"Enemy2")
+e.loadEnemy(pattern.PatternBox(e), "Enemy1")
+#e2.loadEnemy(pattern.Senoid(e2),"Enemy2")
 
 
 
@@ -41,7 +41,7 @@ background = pygame.image.load("data/background.png").convert()
 
 entityList = []
 entityList.append(e)
-entityList.append(e2)
+#entityList.append(e2)
 entityList.append(p)
 
 #fonts
