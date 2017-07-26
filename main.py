@@ -75,7 +75,7 @@ def debugFramesText():
     pass
 
 def clearNameBg(a):
-    t = f.render(a.name,None,None)
+    t = f.render(a.name)
     r = t[1]
     r.x = a.x
     r.y = a.y - 12
@@ -86,8 +86,9 @@ def clearNameBg(a):
 
 def debugNameCaptions():
     for a in entityList:
-        t = f.render(a.name,None,None)
+        t = f.render(a.name)
         s = t[0]
+        s.convert()
         r = t[1]
         r.x = a.x
         r.y = a.y - 11
