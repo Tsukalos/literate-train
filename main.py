@@ -12,6 +12,7 @@ pygame.init()
 freetype.init()
 f = freetype.SysFont("Lucida Console", 14, 0, 0)
 fpsText = Text(freetype.SysFont("Lucida Console ", 15, 1, 0)) 
+entityCounter = Text(freetype.SysFont("Lucida Console ", 15, 1, 0))
 FPS = 60
 fpsClock = pygame.time.Clock()
 screen = pygame.display.set_mode((800, 600), 0, 32)
@@ -25,7 +26,7 @@ pSprite.set_colorkey((255,255,255))
 eSprite = pygame.image.load("data/eSprite.png").convert()
 eSprite.set_colorkey((255,255,255))
 p = Player(Rect(50,50,20,20),pSprite)
-e = Enemy(Rect(350,200,20,20),eSprite)
+e = Enemy(Rect(350,300,20,20),eSprite)
 p.loadSprite(pSprite,20,250) #animation
 e.loadSprite(eSprite,20,250) #animation
 
@@ -69,11 +70,15 @@ def event():
             sys.exit()
 
 def debugFramesText():
-    fpstime = fpsClock.get_fps()
-    fpsText.clearBg(update_list,screen,background)
-    fpsText.update(str(int(fpstime)),Rect(10,10,0,0))
-    fpsText.draw(update_list,screen)
-    pass
+	fpstime = fpsClock.get_fps()
+	entityc = len(bulletList)
+	entityCounter.clearBg(update_list, screen, background)
+	fpsText.clearBg(update_list,screen,background)
+	entityCounter.update(str(entityc),Rect(50,10,0,0))
+	fpsText.update(str(int(fpstime)),Rect(10,10,0,0))
+	entityCounter.draw(update_list, screen)
+	fpsText.draw(update_list,screen)
+
 
 def clearNameBg(a):
     t = f.render(a.name)

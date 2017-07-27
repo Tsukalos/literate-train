@@ -8,7 +8,7 @@ class Enemy(Entity):
 		Entity.__init__(self, rect, surf)
 		#self.pattern = pattern.patternSquare(self)
 		#self.pattern = pattern.Pattern3(self)
-		self.bulletPattern = bulletpattern.Pattern1()
+		self.bulletPattern = bulletpattern.Pattern2()
 
 	def update(self, timePassed, target, bulletList):
 		self.timePassed+=timePassed

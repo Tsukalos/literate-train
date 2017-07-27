@@ -20,8 +20,36 @@ class Pattern1():
             posx += self.vet.x
             posy += self.vet.y
             bulletlist.append(bullet.Bullet(Rect(posx,posy,self.surf1.get_width(),self.surf1.get_height()),self.surf1,movement.Line(Vector2(self.vet.x, self.vet.y),0.3,1,6)))
-            self.vet.rotate_ip(10)
+            self.vet.rotate_ip(1)
             self.timePassed = 0
 
         
         return bulletlist
+
+class Pattern2():
+	def __init__(self):
+		self.timePassed = 0
+		self.c = 0
+		self.vet = Vector2(1,0) * 10
+		self.surf1 = pygame.image.load("data/bullet.png").convert()
+		pass
+
+	def update(self, origin, target, timePassed):
+		self.timePassed += timePassed
+		bulletlist = []
+		if self.timePassed % 250 != self.timePassed:
+			posx = origin.rect.centerx
+			posy = origin.rect.centery 
+			posx += self.vet.x
+			posy += self.vet.y
+			for i in range(0,72):
+				posx = origin.rect.centerx
+				posy = origin.rect.centery 
+				posx += self.vet.x
+				posy += self.vet.y
+				bulletlist.append(bullet.Bullet(Rect(posx,posy,self.surf1.get_width(),self.surf1.get_height()),self.surf1,movement.Line(Vector2(self.vet.x, self.vet.y),0.3,0,6)))
+				self.vet.rotate_ip(5)
+			self.timePassed = 0
+
+		
+		return bulletlist
