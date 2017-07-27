@@ -4,6 +4,7 @@ from player import *
 from entity import *
 from enemy import *
 from text import *
+import movementpattern
 from pprint import pprint
 from pygame import freetype
 
@@ -24,27 +25,18 @@ pSprite.set_colorkey((255,255,255))
 eSprite = pygame.image.load("data/eSprite.png").convert()
 eSprite.set_colorkey((255,255,255))
 p = Player(Rect(50,50,20,20),pSprite)
-e = Enemy(Rect(50,50,20,20),eSprite)
-e2 = Enemy(Rect(50,50,20,20),eSprite)
+e = Enemy(Rect(350,200,20,20),eSprite)
 p.loadSprite(pSprite,20,250) #animation
 e.loadSprite(eSprite,20,250) #animation
-#e2.loadSprite(eSprite,20,250)
 
-
-
-e.loadEnemy(pattern.PatternBox(e), "Enemy1")
-#e2.loadEnemy(pattern.Senoid(e2),"Enemy2")
-
-
+e.loadEnemy(movementpattern.PatternStill(e), "Enemy1")
 
 background = pygame.image.load("data/background.png").convert()
 
 entityList = []
 entityList.append(e)
-#entityList.append(e2)
 entityList.append(p)
 
-#fonts
 
 
 
@@ -55,7 +47,7 @@ def entityUpdate():
         if type(a) == Player:
             a.update(keypress, timePassed)
         if type(a) == Enemy:
-            a.update(timePassed)
+            a.update(timePassed, p)
     for a in entityList:
         a.draw(update_list,screen)
 
@@ -94,6 +86,13 @@ def debugNameCaptions():
         r.y = a.y - 11
         screen.blit(s,r)
         update_list.append(r)
+
+def despawnEntities():
+    for a in entityList:
+        if(a.x < -50 or a.x > 850 or a.y < -50 or a.y > 650):
+            entityList.remove(a)
+
+
 
 screen.blit(background, (0,0))
 pygame.display.update()

@@ -3,18 +3,12 @@ from pygame.math import *
 from collections import namedtuple
 
 class Bullet(Entity):
-    def __init__(self,rect,surf):
+    def __init__(self,rect,surf,movement):
         Entity.__init__(self,rect,surf)
-        self.timePassed = 0
-        self.movementTimer = 0
-
-    def update(self, timePassed, Player):
-        self.timePassed += timePassed
-
-        updateMovement(Player)
-
+        self.movement = movement
         self.timePassed = 0
 
-    def updateMovement(self, Player):
-        self.movementTimer+=self.timePassed
-        #pos = self.Pattern.update(movementTimer, Player)
+    def update(self):
+        self.movement.update(self)
+        self.updateRect()
+
