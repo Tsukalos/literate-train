@@ -10,10 +10,10 @@ class Enemy(Entity):
 		#self.pattern = pattern.Pattern3(self)
 		self.bulletPattern = bulletpattern.Pattern1()
 
-	def update(self, timePassed, target):
+	def update(self, timePassed, target, bulletList):
 		self.timePassed+=timePassed
 		self.updateMovementPattern()
-		self.updateBulletPattern(target)
+		bulletList += self.updateBulletPattern(target)
 		self.updateRect()
 		self.animation()
 		self.timePassed = 0
@@ -22,7 +22,7 @@ class Enemy(Entity):
 		self.movementPattern.update(self.timePassed)
 	
 	def updateBulletPattern(self, target):
-		self.bulletPattern.update(self, target, self.timePassed)
+		return self.bulletPattern.update(self, target, self.timePassed)
 
 
 	def loadEnemy(self, pattern, name):

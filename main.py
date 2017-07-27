@@ -34,6 +34,7 @@ e.loadEnemy(movementpattern.PatternStill(e), "Enemy1")
 background = pygame.image.load("data/background.png").convert()
 
 entityList = []
+bulletList = []
 entityList.append(e)
 entityList.append(p)
 
@@ -47,9 +48,17 @@ def entityUpdate():
         if type(a) == Player:
             a.update(keypress, timePassed)
         if type(a) == Enemy:
-            a.update(timePassed, p)
+            a.update(timePassed, p, bulletList)
+    bulletUpdate()
     for a in entityList:
         a.draw(update_list,screen)
+
+def bulletUpdate():
+    for b in bulletList:
+        b.clearBg(update_list, screen, background)
+        b.update()
+    for b in bulletList:
+        b.draw(update_list, screen)
 
 def event():
     global keypress
@@ -91,16 +100,22 @@ def despawnEntities():
     for a in entityList:
         if(a.x < -50 or a.x > 850 or a.y < -50 or a.y > 650):
             entityList.remove(a)
+    for a in bulletList:
+        if(a.x < -50 or a.x > 850 or a.y < -50 or a.y > 650):
+            bulletList.remove(a)
 
 
 
 screen.blit(background, (0,0))
 pygame.display.update()
 while True:
+    #if len(bulletList) > 20:
+        #bulletList = []
     timePassed = fpsClock.tick(FPS)
     update_list = []
     debugFramesText()
     event()
     entityUpdate()
+    despawnEntities()
     debugNameCaptions()
     pygame.display.update(update_list)

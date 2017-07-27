@@ -12,3 +12,8 @@ class Bullet(Entity):
         self.movement.update(self)
         self.updateRect()
 
+    def draw(self, update_list, screen):
+        screen.blit(self.surface, self.rect)
+        update_list.append(self.rect.copy())
+        
+
