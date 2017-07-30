@@ -19,13 +19,13 @@ class Player(Entity):
 
     def updateMovement(self, keypress):
         if keypress[K_w]:
-            self.y -= 1
+            self.y -= 3
         if keypress[K_a]:
-            self.x -= 1
+            self.x -= 3
         if keypress[K_s]:
-            self.y += 1
+            self.y += 3
         if keypress[K_d]:
-            self.x += 1
+            self.x += 3
 
         if keypress[K_z]:
             firing = True
