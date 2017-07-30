@@ -12,6 +12,7 @@ pygame.init()
 freetype.init()
 f = freetype.SysFont("Lucida Console", 14, 0, 0)
 fpsText = Text(freetype.SysFont("Lucida Console ", 15, 1, 0)) 
+entityCounter = Text(freetype.SysFont("Lucida Console ", 15, 1, 0))
 FPS = 60
 fpsClock = pygame.time.Clock()
 screen = pygame.display.set_mode((800, 600), 0, 32)
@@ -25,15 +26,16 @@ pSprite.set_colorkey((255,255,255))
 eSprite = pygame.image.load("data/eSprite.png").convert()
 eSprite.set_colorkey((255,255,255))
 p = Player(Rect(50,50,20,20),pSprite)
-e = Enemy(Rect(350,200,20,20),eSprite)
+e = Enemy(Rect(50,50,20,20),eSprite)
 p.loadSprite(pSprite,20,250) #animation
 e.loadSprite(eSprite,20,250) #animation
 
-e.loadEnemy(movementpattern.PatternStill(e), "Enemy1")
+e.loadEnemy(movementpattern.PatternBox(e), "Enemy1")
 
 background = pygame.image.load("data/background.png").convert()
 
 entityList = []
+bulletList = []
 entityList.append(e)
 entityList.append(p)
 
@@ -47,9 +49,17 @@ def entityUpdate():
         if type(a) == Player:
             a.update(keypress, timePassed)
         if type(a) == Enemy:
-            a.update(timePassed, p)
+            a.update(timePassed, p, bulletList)
+    bulletUpdate()
     for a in entityList:
         a.draw(update_list,screen)
+
+def bulletUpdate():
+    for b in bulletList:
+        b.clearBg(update_list, screen, background)
+        b.update()
+    for b in bulletList:
+        b.draw(update_list, screen)
 
 def event():
     global keypress
@@ -60,11 +70,15 @@ def event():
             sys.exit()
 
 def debugFramesText():
-    fpstime = fpsClock.get_fps()
-    fpsText.clearBg(update_list,screen,background)
-    fpsText.update(str(int(fpstime)),Rect(10,10,0,0))
-    fpsText.draw(update_list,screen)
-    pass
+	fpstime = fpsClock.get_fps()
+	entityc = len(bulletList)
+	entityCounter.clearBg(update_list, screen, background)
+	fpsText.clearBg(update_list,screen,background)
+	entityCounter.update(str(entityc),Rect(50,10,0,0))
+	fpsText.update(str(int(fpstime)),Rect(10,10,0,0))
+	entityCounter.draw(update_list, screen)
+	fpsText.draw(update_list,screen)
+
 
 def clearNameBg(a):
     t = f.render(a.name)
@@ -91,16 +105,22 @@ def despawnEntities():
     for a in entityList:
         if(a.x < -50 or a.x > 850 or a.y < -50 or a.y > 650):
             entityList.remove(a)
+    for a in bulletList:
+        if(a.x < -50 or a.x > 850 or a.y < -50 or a.y > 650):
+            bulletList.remove(a)
 
 
 
 screen.blit(background, (0,0))
 pygame.display.update()
 while True:
+    #if len(bulletList) > 20:
+        #bulletList = []
     timePassed = fpsClock.tick(FPS)
     update_list = []
     debugFramesText()
     event()
     entityUpdate()
+    despawnEntities()
     debugNameCaptions()
     pygame.display.update(update_list)

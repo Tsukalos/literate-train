@@ -7,6 +7,7 @@ class MovementPattern():
 		self.entity = entity
 		self.movePointer = 0
 		self.move_list = []
+		self.loop = 1
 		
 	def update(self, timePassed):
 		self.timer+=timePassed
@@ -14,8 +15,11 @@ class MovementPattern():
 			if(self.timer > self.move_list[self.movePointer][1]):
 				self.movePointer+=1
 				if(self.movePointer == len(self.move_list)):
-					self.movePointer = 0
-					self.move_list = self.patternList()
+					if(self.loop):
+						self.movePointer = 0
+						self.move_list = self.patternList()
+					else:
+						self.movePointer-=1
 				self.timer = 0
 			self.move_list[self.movePointer][0].update(self.entity)
 
@@ -24,6 +28,7 @@ class PatternBox(MovementPattern):
 	def __init__(self, entity):
 		MovementPattern.__init__(self, entity)
 		self.move_list = self.patternList()
+		self.loop = 1
 
 	def	patternList(self):
 		mList = []
@@ -37,6 +42,7 @@ class PatternStill(MovementPattern):
 	def __init__(self, entity):
 		MovementPattern.__init__(self, entity)
 		self.move_list = self.patternList()
+		self.loop = 0
 
 	def	patternList(self):
 		mList = []
