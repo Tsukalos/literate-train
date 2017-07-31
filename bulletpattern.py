@@ -3,6 +3,27 @@ import pygame.image
 from pygame.rect import *
 import movement, bullet
 
+class PlayerPattern1():
+	def __init__(self):
+		self.v = Vector2(0,-1)
+		self.surf1 = pygame.image.load("data/pbullet.png").convert()
+		self.surf1.set_colorkey((255,255,255))
+		self.damage = 3
+		self.timePassed = 0
+
+	def update(self, origin, timepassed):
+		self.timePassed += timepassed
+		bulletlist = []
+		if (self.timePassed >= 15):
+			r = Rect(0,0,self.surf1.get_width(),self.surf1.get_height())
+			r.center = (origin.rect.centerx+self.v.x,origin.rect.centery+self.v.y)
+			bulletlist.append(bullet.Bullet(r,self.surf1,movement.Line(self.v,20,0,10)))
+			self.timePassed = 0
+		return bulletlist
+		
+
+
+
 class PatternSpiral4Origin():
 	def __init__(self):
 		self.timePassed = 0

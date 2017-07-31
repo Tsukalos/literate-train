@@ -21,21 +21,22 @@ keypress = []
 
 
 
-pSprite = pygame.image.load("data/sprite.png").convert()
+pSprite = pygame.image.load("data/player2.png").convert()
 pSprite.set_colorkey((255,255,255))
 eSprite = pygame.image.load("data/eSprite.png").convert()
 eSprite.set_colorkey((255,255,255))
-p = Player(Rect(50,50,20,20),pSprite)
+p = Player(Rect(50,50,21,21),pSprite)
 e = Enemy(Rect(50,50,20,20),eSprite)
-p.loadSprite(pSprite,20,250) #animation
+p.loadSprite(pSprite,21,250) #animation
 e.loadSprite(eSprite,20,250) #animation
 
-e.loadEnemy(movementpattern.PatternBox(e), "Enemy1")
+e.loadEnemy(movementpattern.PatternBox(e), "Enemy1", bulletpattern.PatternSpiral4Origin(),1000)
 
 background = pygame.image.load("data/background.png").convert()
 
 entityList = []
 bulletList = []
+pbulletList = []
 entityList.append(e)
 entityList.append(p)
 
@@ -47,7 +48,7 @@ def entityUpdate():
         clearNameBg(a)
         a.clearBg(update_list, screen, background)
         if type(a) == Player:
-            a.update(keypress, timePassed)
+            a.update(keypress, timePassed, pbulletList)
         if type(a) == Enemy:
             a.update(timePassed, p, bulletList)
     bulletUpdate()
@@ -55,10 +56,10 @@ def entityUpdate():
         a.draw(update_list,screen)
 
 def bulletUpdate():
-    for b in bulletList:
+    for b in bulletList + pbulletList:
         b.clearBg(update_list, screen, background)
         b.update()
-    for b in bulletList:
+    for b in bulletList + pbulletList:
         b.draw(update_list, screen)
 
 def event():
@@ -71,7 +72,7 @@ def event():
 
 def debugFramesText():
 	fpstime = fpsClock.get_fps()
-	entityc = len(bulletList)
+	entityc = len(bulletList+pbulletList)
 	entityCounter.clearBg(update_list, screen, background)
 	fpsText.clearBg(update_list,screen,background)
 	entityCounter.update(str(entityc),Rect(50,10,0,0))
@@ -81,7 +82,11 @@ def debugFramesText():
 
 
 def clearNameBg(a):
-    t = f.render(a.name)
+    if(type(a) == Enemy):
+        txt = a.name+"["+str(a.hp)+"]"
+    else:
+        txt = a.name
+    t = f.render(txt)
     r = t[1]
     r.x = a.x
     r.y = a.y - 12
@@ -92,7 +97,11 @@ def clearNameBg(a):
 
 def debugNameCaptions():
     for a in entityList:
-        t = f.render(a.name)
+        if(type(a) == Enemy):
+            txt = a.name+"["+str(a.hp)+"]"
+        else:
+            txt = a.name
+        t = f.render(txt)
         s = t[0]
         s.convert()
         r = t[1]
@@ -105,11 +114,22 @@ def despawnEntities():
     for a in entityList:
         if(a.x < -50 or a.x > 850 or a.y < -50 or a.y > 650):
             entityList.remove(a)
-    for a in bulletList:
+    for a in pbulletList+bulletList:
         if(a.x < -50 or a.x > 850 or a.y < -50 or a.y > 650):
-            bulletList.remove(a)
+            if a in pbulletList:
+                pbulletList.remove(a)
+            else:
+                bulletList.remove(a)
 
-
+def updateDamage():
+    for a in entityList:
+        if(type(a) == Enemy):
+            if a.hp < 0:
+                entityList.remove(a)
+            else:
+                x = len(a.rect.collidelistall(pbulletList))
+                if(x>0):
+                    a.hp -= x*p.firingpattern.damage
 
 screen.blit(background, (0,0))
 pygame.display.update()
@@ -121,6 +141,7 @@ while True:
     debugFramesText()
     event()
     entityUpdate()
+    updateDamage()
     despawnEntities()
     debugNameCaptions()
     pygame.display.update(update_list)

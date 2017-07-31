@@ -6,9 +6,10 @@ import bulletpattern
 class Enemy(Entity):
 	def __init__(self, rect, surf):
 		Entity.__init__(self, rect, surf)
+		self.hp = 0
 		#self.pattern = pattern.patternSquare(self)
 		#self.pattern = pattern.Pattern3(self)
-		self.bulletPattern = bulletpattern.Pattern2()
+		#self.bulletPattern = bulletpattern.Pattern2()
 
 	def update(self, timePassed, target, bulletList):
 		self.timePassed+=timePassed
@@ -25,9 +26,11 @@ class Enemy(Entity):
 		return self.bulletPattern.update(self, target, self.timePassed)
 
 
-	def loadEnemy(self, pattern, name):
-		self.movementPattern = pattern
+	def loadEnemy(self, movementpattern, name, bulletpattern, hp):
+		self.movementPattern = movementpattern
 		self.name = name
+		self.bulletPattern = bulletpattern
+		self.hp = hp
 
 	#def setType(self, Type):
 		#self.Type = Type

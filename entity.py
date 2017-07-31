@@ -31,9 +31,10 @@ class Entity():
     def animation(self):
         self.animationTimer+=self.timePassed
         if(self.animationTimer > self.animationTime):
-            self.currentTile+=1
             if(self.currentTile == (self.surface.get_width()/self.tileSize)-1):
                 self.currentTile = 0
+            else:
+                self.currentTile+=1
             self.animationTimer = 0
 
     def loadSprite(self, sprite, tileSize, animationTime):
