@@ -26,7 +26,7 @@ pSprite = pygame.image.load("data/player2.png").convert()
 pSprite.set_colorkey((255,255,255))
 eSprite = pygame.image.load("data/eSprite.png").convert()
 eSprite.set_colorkey((255,255,255))
-p = Player(Rect(50,50,21,21),pSprite, pygame.mask.from_surface(pSprite))
+p = Player(Rect(50,50,pSprite.get_height(),pSprite.get_height()),pSprite, pygame.mask.from_surface(pSprite))
 e = Enemy(Rect(350,300,20,20),eSprite, pygame.mask.from_surface(eSprite))
 p.loadSprite(pSprite,21,250) #animation
 e.loadSprite(eSprite,20,250) #animation
