@@ -3,8 +3,8 @@ from pygame.math import *
 from collections import namedtuple
 
 class Bullet(Entity):
-    def __init__(self,rect,surf,movement):
-        Entity.__init__(self,rect,surf)
+    def __init__(self,rect,surf,movement, mask):
+        Entity.__init__(self,rect,surf, mask)
         self.movement = movement
         self.timePassed = 0
 

@@ -4,8 +4,8 @@ from collections import namedtuple
 import bulletpattern
 
 class Enemy(Entity):
-	def __init__(self, rect, surf):
-		Entity.__init__(self, rect, surf)
+	def __init__(self, rect, surf, mask):
+		Entity.__init__(self, rect, surf, mask)
 		self.hp = 0
 		#self.pattern = pattern.patternSquare(self)
 		#self.pattern = pattern.Pattern3(self)
