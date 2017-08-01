@@ -4,6 +4,7 @@ from player import *
 from entity import *
 from enemy import *
 from text import *
+from pygame.mask import *
 import movementpattern
 from pprint import pprint
 from pygame import freetype
@@ -19,18 +20,18 @@ screen = pygame.display.set_mode((800, 600), 0, 32)
 update_list = []
 keypress = []
 
-
+enableCollision = False
 
 pSprite = pygame.image.load("data/player2.png").convert()
 pSprite.set_colorkey((255,255,255))
 eSprite = pygame.image.load("data/eSprite.png").convert()
 eSprite.set_colorkey((255,255,255))
-p = Player(Rect(50,50,21,21),pSprite)
-e = Enemy(Rect(50,50,20,20),eSprite)
+p = Player(Rect(50,50,pSprite.get_height(),pSprite.get_height()),pSprite, pygame.mask.from_surface(pSprite))
+e = Enemy(Rect(350,300,20,20),eSprite, pygame.mask.from_surface(eSprite))
 p.loadSprite(pSprite,21,250) #animation
 e.loadSprite(eSprite,20,250) #animation
 
-e.loadEnemy(movementpattern.PatternBox(e), "Enemy1", bulletpattern.PatternSpiral4Origin(),1000)
+e.loadEnemy(movementpattern.PatternStill(e), "Enemy1", bulletpattern.PatternSpiral4Origin(),1000)
 
 background = pygame.image.load("data/background.png").convert()
 
@@ -54,11 +55,14 @@ def entityUpdate():
     bulletUpdate()
     for a in entityList:
         a.draw(update_list,screen)
+    bulletDraw()
 
 def bulletUpdate():
     for b in bulletList + pbulletList:
         b.clearBg(update_list, screen, background)
         b.update()
+
+def bulletDraw():
     for b in bulletList + pbulletList:
         b.draw(update_list, screen)
 
@@ -125,11 +129,23 @@ def updateDamage():
     for a in entityList:
         if(type(a) == Enemy):
             if a.hp < 0:
+                a.clearBg(update_list,screen,background)
                 entityList.remove(a)
             else:
                 x = len(a.rect.collidelistall(pbulletList))
                 if(x>0):
                     a.hp -= x*p.firingpattern.damage
+
+def checkPlayerCollision():
+    for b in bulletList:
+        if(p.rect.colliderect(b.rect)):
+            ox = p.hitbox.x - b.rect.x
+            oy = p.hitbox.y - b.rect.y
+            if(p.mask.overlap(b.mask,(ox,oy))):
+                if(p in entityList):
+                    p.clearBg(update_list, screen, background)
+                    entityList.remove(p)
+    pass
 
 screen.blit(background, (0,0))
 pygame.display.update()
@@ -141,6 +157,8 @@ while True:
     debugFramesText()
     event()
     entityUpdate()
+    if enableCollision:
+        checkPlayerCollision()
     updateDamage()
     despawnEntities()
     debugNameCaptions()

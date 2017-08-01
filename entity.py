@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 class Entity():
-    def __init__(self,rect,surf):
+    def __init__(self,rect,surf, mask):
         self.x = rect.x
         self.y = rect.y
         self.rect = rect
@@ -9,10 +9,17 @@ class Entity():
         self.timePassed = 0
         self.animationTimer = 0
         self.name = ""
+        self.mask = mask
 
     def clearBg(self, update_list, screen, background):
         screen.blit(background,self.rect,self.rect)
-        update_list.append(self.rect.copy())
+        r = self.rect.copy()
+        r.x -= 10
+        r.y -= 10
+        r.h += 10
+        r.w += 10
+        update_list.append(r)
+        del r
         return
 
     def updateAction():
@@ -25,8 +32,10 @@ class Entity():
     	return
 
     def updateRect(self):
-    	self.rect.x = self.x
-    	self.rect.y = self.y
+        self.rect.x = self.x
+        self.rect.y = self.y
+        if(hasattr(self,"hitbox")):
+            self.hitbox.center = self.rect.center
 
     def animation(self):
         self.animationTimer+=self.timePassed
@@ -44,5 +53,12 @@ class Entity():
     	self.currentTile = 0
 
     def draw(self,update_list, screen):
-    	screen.blit(self.surface,self.rect,Rect(self.currentTile*self.tileSize,0,self.tileSize,self.tileSize))
-    	update_list.append(self.rect.copy())
+        screen.blit(self.surface,self.rect,Rect(self.currentTile*self.tileSize,0,self.tileSize,self.tileSize))
+        if(hasattr(self,"hitbox") and self.focus):
+            screen.blit(self.hitboxsurface, self.hitbox)
+        r = self.rect.copy()
+        r.x -= 10
+        r.y -= 10
+        r.h += 10
+        r.w += 10
+        update_list.append(r)

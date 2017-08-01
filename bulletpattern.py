@@ -1,6 +1,8 @@
 from pygame.math import *
 import pygame.image
 from pygame.rect import *
+from pygame.mask import *
+import pygame.mask
 import movement, bullet
 
 class PlayerPattern1():
@@ -8,6 +10,7 @@ class PlayerPattern1():
 		self.v = Vector2(0,-1)
 		self.surf1 = pygame.image.load("data/pbullet.png").convert()
 		self.surf1.set_colorkey((255,255,255))
+		self.mask1 = pygame.mask.from_surface(self.surf1)
 		self.damage = 3
 		self.timePassed = 0
 
@@ -17,7 +20,7 @@ class PlayerPattern1():
 		if (self.timePassed >= 15):
 			r = Rect(0,0,self.surf1.get_width(),self.surf1.get_height())
 			r.center = (origin.rect.centerx+self.v.x,origin.rect.centery+self.v.y)
-			bulletlist.append(bullet.Bullet(r,self.surf1,movement.Line(self.v,20,0,10)))
+			bulletlist.append(bullet.Bullet(r,self.surf1,movement.Line(self.v,20,0,10),self.mask1))
 			self.timePassed = 0
 		return bulletlist
 		
@@ -32,8 +35,9 @@ class PatternSpiral4Origin():
 		self.v2 = Vector2(-1,0) * 40
 		self.v3 = Vector2(0,1) * 40
 		self.v4 = Vector2(0,-1) * 40
-		self.surf1 = pygame.image.load("data/bullet2.png").convert()
+		self.surf1 = pygame.image.load("data/bullet.png").convert()
 		self.surf1.set_colorkey((255,255,255))
+		self.mask1 = pygame.mask.from_surface(self.surf1)
 		pass
 
 	def update(self, origin, target, timePassed):
@@ -56,7 +60,7 @@ class PatternSpiral4Origin():
 		posy += vet.y
 		r = Rect(posx,posy,self.surf1.get_width(),self.surf1.get_height())
 		r.center = (posx,posy)
-		bulletlist.append(bullet.Bullet(r,self.surf1,movement.Line(Vector2(vet.x, vet.y),5,-10,1)))
+		bulletlist.append(bullet.Bullet(r,self.surf1,movement.Line(Vector2(vet.x, vet.y),5,-10,1),self.mask1))
 		vet.rotate_ip(10)
 
 
@@ -67,6 +71,7 @@ class Pattern2():
 		self.vet = Vector2(1,0) * 10
 		self.surf1 = pygame.image.load("data/bullet.png").convert()
 		self.surf1.set_colorkey((255,255,255))
+		self.mask1 = pygame.mask.from_surface(self.surf1)
 		pass
 
 	def update(self, origin, target, timePassed):
@@ -84,7 +89,7 @@ class Pattern2():
 				posy += self.vet.y
 				r = Rect(posx,posy,self.surf1.get_width(),self.surf1.get_height())
 				r.center = (posx, posy)
-				bulletlist.append(bullet.Bullet(r,self.surf1,movement.Line(Vector2(self.vet.x, self.vet.y),0.6,4,6)))
+				bulletlist.append(bullet.Bullet(r,self.surf1,movement.Line(Vector2(self.vet.x, self.vet.y),0.6,4,6),self.mask1))
 				self.vet.rotate_ip(15)
 			self.timePassed = 0
 

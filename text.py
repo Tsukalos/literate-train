@@ -6,7 +6,7 @@ class Text(Entity):
     def __init__(self, font):
         surf = surface.Surface((0,0))
         r = rect.Rect(0,0,0,0)
-        Entity.__init__(self, r, surf)
+        Entity.__init__(self, r, surf, None)
         self.font = font
         self.txt = ""
     
