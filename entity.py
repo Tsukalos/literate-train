@@ -57,8 +57,6 @@ class Entity():
         if(hasattr(self,"hitbox") and self.focus):
             screen.blit(self.hitboxsurface, self.hitbox)
         r = self.rect.copy()
-        r.x -= 10
-        r.y -= 10
         r.h += 10
         r.w += 10
         update_list.append(r)
