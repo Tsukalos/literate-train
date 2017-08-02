@@ -8,6 +8,7 @@ from pygame.mask import *
 import movementpattern
 from pprint import pprint
 from pygame import freetype
+from effect import *
 
 pygame.init()
 freetype.init()
@@ -22,7 +23,11 @@ keypress = []
 
 enableCollision = False
 
-pSprite = pygame.image.load("data/player2.png").convert()
+loadedEffects = [
+    pygame.image.load("data/effect1.png")
+]
+
+pSprite = pygame.image.load("data/test.png").convert()
 pSprite.set_colorkey((255,255,255))
 eSprite = pygame.image.load("data/eSprite.png").convert()
 eSprite.set_colorkey((255,255,255))
@@ -31,13 +36,14 @@ e = Enemy(Rect(350,300,20,20),eSprite, pygame.mask.from_surface(eSprite))
 p.loadSprite(pSprite,21,250) #animation
 e.loadSprite(eSprite,20,250) #animation
 
-e.loadEnemy(movementpattern.PatternStill(e), "Enemy1", bulletpattern.PatternSpiral4Origin(),1000)
+e.loadEnemy(movementpattern.PatternStill(e), "Enemy1", bulletpattern.Pattern3(),1000)
 
 background = pygame.image.load("data/background.png").convert()
 
 entityList = []
 bulletList = []
 pbulletList = []
+effectList = []
 entityList.append(e)
 entityList.append(p)
 
@@ -53,9 +59,11 @@ def entityUpdate():
         if type(a) == Enemy:
             a.update(timePassed, p, bulletList)
     bulletUpdate()
+    effectUpdate()
     for a in entityList:
         a.draw(update_list,screen)
     bulletDraw()
+    effectDraw()
 
 def bulletUpdate():
     for b in bulletList + pbulletList:
@@ -67,8 +75,13 @@ def bulletDraw():
         b.draw(update_list, screen)
 
 def event():
-    global keypress
+    global keypress, enableCollision
     keypress = pygame.key.get_pressed()
+    if keypress[K_c] and keypress[K_LSHIFT]:
+        enableCollision = True
+    if keypress[K_v] and keypress[K_LSHIFT]:
+        enableCollision = False
+
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
@@ -130,6 +143,8 @@ def updateDamage():
         if(type(a) == Enemy):
             if a.hp < 0:
                 a.clearBg(update_list,screen,background)
+                s = loadedEffects[0]
+                effectList.append(EffectSimpleSprite(a.rect,False,s,400,Rect(0,0,s.get_height(),s.get_height())))
                 entityList.remove(a)
             else:
                 x = len(a.rect.collidelistall(pbulletList))
@@ -139,13 +154,24 @@ def updateDamage():
 def checkPlayerCollision():
     for b in bulletList:
         if(p.rect.colliderect(b.rect)):
-            ox = p.hitbox.x - b.rect.x
-            oy = p.hitbox.y - b.rect.y
+            ox = b.rect.x - p.hitbox.x
+            oy = b.rect.y - p.hitbox.y
             if(p.mask.overlap(b.mask,(ox,oy))):
                 if(p in entityList):
                     p.clearBg(update_list, screen, background)
                     entityList.remove(p)
     pass
+
+def effectUpdate():
+    for e in effectList:
+        e.clearBg(update_list, screen, background)
+        e.update(timePassed)
+        if e.end:
+            effectList.remove(e)
+
+def effectDraw():
+    for e in effectList:
+        e.draw(update_list, screen)
 
 screen.blit(background, (0,0))
 pygame.display.update()

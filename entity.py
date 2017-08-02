@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 class Entity():
-    def __init__(self,rect,surf, mask):
+    def __init__(self, rect, surf, mask):
         self.x = rect.x
         self.y = rect.y
         self.rect = rect
@@ -14,10 +14,8 @@ class Entity():
     def clearBg(self, update_list, screen, background):
         screen.blit(background,self.rect,self.rect)
         r = self.rect.copy()
-        r.x -= 10
-        r.y -= 10
-        r.h += 10
-        r.w += 10
+        r.w +=5
+        r.h +=5
         update_list.append(r)
         del r
         return
@@ -57,8 +55,6 @@ class Entity():
         if(hasattr(self,"hitbox") and self.focus):
             screen.blit(self.hitboxsurface, self.hitbox)
         r = self.rect.copy()
-        r.x -= 10
-        r.y -= 10
-        r.h += 10
-        r.w += 10
+        r.h += 5
+        r.w += 5
         update_list.append(r)
