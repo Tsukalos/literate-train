@@ -15,6 +15,7 @@ freetype.init()
 f = freetype.SysFont("Lucida Console", 14, 0, 0)
 fpsText = Text(freetype.SysFont("Lucida Console ", 15, 1, 0)) 
 entityCounter = Text(freetype.SysFont("Lucida Console ", 15, 1, 0))
+dps = Text(freetype.SysFont("Lucida Console ", 15, 1,))
 FPS = 60
 fpsClock = pygame.time.Clock()
 screen = pygame.display.set_mode((800, 600), 0, 32)
@@ -24,7 +25,8 @@ keypress = []
 enableCollision = False
 
 loadedEffects = [
-    pygame.image.load("data/effect1.png")
+    pygame.image.load("data/effect1.png"),
+    pygame.image.load("data/effect2.png")
 ]
 
 pSprite = pygame.image.load("data/test.png").convert()
@@ -47,7 +49,7 @@ effectList = []
 entityList.append(e)
 entityList.append(p)
 
-
+dmg = 0
 
 
 def entityUpdate():
@@ -88,14 +90,20 @@ def event():
             sys.exit()
 
 def debugFramesText():
-	fpstime = fpsClock.get_fps()
-	entityc = len(bulletList+pbulletList)
-	entityCounter.clearBg(update_list, screen, background)
-	fpsText.clearBg(update_list,screen,background)
-	entityCounter.update(str(entityc),Rect(50,10,0,0))
-	fpsText.update(str(int(fpstime)),Rect(10,10,0,0))
-	entityCounter.draw(update_list, screen)
-	fpsText.draw(update_list,screen)
+    global dmg
+    fpstime = fpsClock.get_fps()
+    entityc = len(bulletList+pbulletList)
+    entityCounter.clearBg(update_list, screen, background)
+    fpsText.clearBg(update_list,screen,background)
+    dps.clearBg(update_list,screen,background)
+    dps.update(str(int(dmg/timePassed*100)), Rect(80,10,0,0))
+    entityCounter.update(str(entityc),Rect(50,10,0,0))
+    fpsText.update(str(int(fpstime)),Rect(10,10,0,0))
+    entityCounter.draw(update_list, screen)
+    fpsText.draw(update_list,screen)
+    dps.draw(update_list,screen)
+    dmg = 0
+    
 
 
 def clearNameBg(a):
@@ -147,9 +155,18 @@ def updateDamage():
                 effectList.append(EffectSimpleSprite(a.rect,False,s,400,Rect(0,0,s.get_height(),s.get_height())))
                 entityList.remove(a)
             else:
-                x = len(a.rect.collidelistall(pbulletList))
+                l = a.rect.collidelistall(pbulletList)
+                x = len(l)
                 if(x>0):
-                    a.hp -= x*p.firingpattern.damage
+                    l = set(l) - set(a.lastHitIndex)
+                    for k in l:
+                        r = pbulletList[k].rect
+                        s = loadedEffects[1]
+                        effectList.append(EffectSimpleSprite(r,False,s,200,Rect(0,0,s.get_height(),s.get_height())))
+                        a.hp -= p.firingpattern.damage
+                        global dmg
+                        dmg += p.firingpattern.damage
+                    a.lastHitIndex = l
 
 def checkPlayerCollision():
     for b in bulletList:

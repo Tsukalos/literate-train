@@ -6,7 +6,7 @@ from pygame.math import *
 class EffectSimpleSprite():
     def __init__(self, rect, isRef, surf1, duration, tileSize):
         self.surf1 = surf1
-        #self.surf1.set_colorkey((255,255,255))
+        self.surf1.convert_alpha()
         self.rect = rect.copy()
         if isRef:
             self.ref = rect
@@ -14,6 +14,7 @@ class EffectSimpleSprite():
             self.ref = None
         self.rect.w = tileSize.w
         self.rect.h = tileSize.h
+        self.rect.center = rect.center
         self.tileSize = tileSize
         self.nframes = self.surf1.get_width()/tileSize.w 
         self.interval = duration/self.nframes
@@ -23,8 +24,7 @@ class EffectSimpleSprite():
 
     def update(self, timePassed):
         if self.ref != None:
-            self.rect.x = self.ref.x
-            self.rect.y = self.ref.y
+            self.rect.center  = self.ref.center
         self.timePassed += timePassed
         if(self.timePassed >= self.interval and (not self.end)):
             if(self.currentFrame < self.nframes):

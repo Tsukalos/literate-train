@@ -10,6 +10,7 @@ class Enemy(Entity):
 		#self.pattern = pattern.patternSquare(self)
 		#self.pattern = pattern.Pattern3(self)
 		#self.bulletPattern = bulletpattern.Pattern2()
+		self.lastHitIndex = []
 
 	def update(self, timePassed, target, bulletList):
 		self.timePassed+=timePassed

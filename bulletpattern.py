@@ -8,7 +8,7 @@ import movement, bullet
 class PlayerPattern1():
 	def __init__(self):
 		self.v = Vector2(0,-1)
-		self.surf1 = pygame.image.load("data/pbullet.png").convert()
+		self.surf1 = pygame.image.load("data/pbullet.png").convert_alpha()
 		self.surf1.set_colorkey((255,255,255))
 		self.mask1 = pygame.mask.from_surface(self.surf1)
 		self.damage = 3
