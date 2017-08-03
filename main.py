@@ -157,16 +157,22 @@ def updateDamage():
             else:
                 l = a.rect.collidelistall(pbulletList)
                 x = len(l)
+                for i in a.lastHitIndex:
+                    if (not i in pbulletList):
+                        a.lastHitIndex.remove(i)
                 if(x>0):
-                    l = set(l) - set(a.lastHitIndex)
+                    #l = set(l) - set(a.lastHitIndex)
                     for k in l:
-                        r = pbulletList[k].rect
-                        s = loadedEffects[1]
-                        effectList.append(EffectSimpleSprite(r,False,s,200,Rect(0,0,s.get_height(),s.get_height())))
-                        a.hp -= p.firingpattern.damage
-                        global dmg
-                        dmg += p.firingpattern.damage
-                    a.lastHitIndex = l
+                        if (not pbulletList[k] in a.lastHitIndex):
+                            r = pbulletList[k].rect
+                            #r.center = a.rect.copy().midbottom
+                            s = loadedEffects[1]
+                            effectList.append(EffectSimpleSprite(r,False,s,200,Rect(0,0,s.get_height(),s.get_height())))
+                            a.hp -= p.firingpattern.damage
+                            global dmg
+                            dmg += p.firingpattern.damage
+                            a.lastHitIndex.append(pbulletList[k])
+                    #a.lastHitIndex = l
 
 def checkPlayerCollision():
     for b in bulletList:

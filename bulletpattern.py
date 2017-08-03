@@ -17,10 +17,10 @@ class PlayerPattern1():
 	def update(self, origin, timepassed):
 		self.timePassed += timepassed
 		bulletlist = []
-		if (self.timePassed >= 15):
+		if (self.timePassed >= 20):
 			r = Rect(0,0,self.surf1.get_width(),self.surf1.get_height())
 			r.center = (origin.rect.centerx+self.v.x,origin.rect.centery+self.v.y)
-			bulletlist.append(bullet.Bullet(r,self.surf1,movement.Line(self.v,20,0,10),self.mask1))
+			bulletlist.append(bullet.Bullet(r,self.surf1,movement.Line(self.v,15,0,10),self.mask1))
 			self.timePassed = 0
 		return bulletlist
 		
