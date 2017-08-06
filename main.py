@@ -5,13 +5,13 @@ from entity import *
 from enemy import *
 from text import *
 from pygame.mask import *
-import movementpattern
 from pprint import pprint
 from pygame import freetype
 from effect import *
 
 pygame.init()
 freetype.init()
+
 f = freetype.SysFont("Lucida Console", 14, 0, 0)
 fpsText = Text(freetype.SysFont("Lucida Console ", 15, 1, 0)) 
 entityCounter = Text(freetype.SysFont("Lucida Console ", 15, 1, 0))
@@ -23,10 +23,10 @@ update_list = []
 keypress = []
 
 enableCollision = False
-
+import level
 loadedEffects = [
-    pygame.image.load("data/effect1.png"),
-    pygame.image.load("data/effect2.png")
+    pygame.image.load("data/effect1.png").convert_alpha(),
+    pygame.image.load("data/effect2.png").convert_alpha()
 ]
 
 pSprite = pygame.image.load("data/test.png").convert()
@@ -34,11 +34,11 @@ pSprite.set_colorkey((255,255,255))
 eSprite = pygame.image.load("data/eSprite.png").convert()
 eSprite.set_colorkey((255,255,255))
 p = Player(Rect(50,50,pSprite.get_height(),pSprite.get_height()),pSprite, pygame.mask.from_surface(pSprite))
-e = Enemy(Rect(350,300,20,20),eSprite, pygame.mask.from_surface(eSprite))
+#e = Enemy(Rect(350,300,20,20),eSprite, pygame.mask.from_surface(eSprite))
 p.loadSprite(pSprite,21,250) #animation
-e.loadSprite(eSprite,20,250) #animation
+#e.loadSprite(eSprite,20,250) #animation
 
-e.loadEnemy(movementpattern.PatternStill(e), "Enemy1", bulletpattern.Pattern3(),1000)
+#e.loadEnemy(movementpattern.PatternStill(e), "Enemy1", bulletpattern.Pattern3(),1000)
 
 background = pygame.image.load("data/background.png").convert()
 
@@ -46,7 +46,7 @@ entityList = []
 bulletList = []
 pbulletList = []
 effectList = []
-entityList.append(e)
+#entityList.append(e)
 entityList.append(p)
 
 dmg = 0
@@ -58,7 +58,7 @@ def entityUpdate():
         a.clearBg(update_list, screen, background)
         if type(a) == Player:
             a.update(keypress, timePassed, pbulletList)
-        if type(a) == Enemy:
+        if type(a) == Enemy or issubclass(type(a),Enemy):
             a.update(timePassed, p, bulletList)
     bulletUpdate()
     effectUpdate()
@@ -96,7 +96,7 @@ def debugFramesText():
     entityCounter.clearBg(update_list, screen, background)
     fpsText.clearBg(update_list,screen,background)
     dps.clearBg(update_list,screen,background)
-    dps.update(str(int(dmg/timePassed*100)), Rect(80,10,0,0))
+    dps.update(str(int(dmg/timePassed*100)), Rect(150,10,0,0))
     entityCounter.update(str(entityc),Rect(50,10,0,0))
     fpsText.update(str(int(fpstime)),Rect(10,10,0,0))
     entityCounter.draw(update_list, screen)
@@ -107,7 +107,7 @@ def debugFramesText():
 
 
 def clearNameBg(a):
-    if(type(a) == Enemy):
+    if(type(a) == Enemy or issubclass(type(a),Enemy)):
         txt = a.name+"["+str(a.hp)+"]"
     else:
         txt = a.name
@@ -122,7 +122,7 @@ def clearNameBg(a):
 
 def debugNameCaptions():
     for a in entityList:
-        if(type(a) == Enemy):
+        if(type(a) == Enemy or issubclass(type(a),Enemy)):
             txt = a.name+"["+str(a.hp)+"]"
         else:
             txt = a.name
@@ -148,7 +148,7 @@ def despawnEntities():
 
 def updateDamage():
     for a in entityList:
-        if(type(a) == Enemy):
+        if(type(a) == Enemy or issubclass(type(a),Enemy)):
             if a.hp < 0:
                 a.clearBg(update_list,screen,background)
                 s = loadedEffects[0]
@@ -164,8 +164,8 @@ def updateDamage():
                     #l = set(l) - set(a.lastHitIndex)
                     for k in l:
                         if (not pbulletList[k] in a.lastHitIndex):
-                            r = pbulletList[k].rect
-                            #r.center = a.rect.copy().midbottom
+                            r = pbulletList[k].rect.copy()
+                            #r.center = a.rect.midbottom
                             s = loadedEffects[1]
                             effectList.append(EffectSimpleSprite(r,False,s,200,Rect(0,0,s.get_height(),s.get_height())))
                             a.hp -= p.firingpattern.damage
@@ -196,13 +196,32 @@ def effectDraw():
     for e in effectList:
         e.draw(update_list, screen)
 
+
+
+background = level.Level1.background
+spawnlist = level.Level1.spawnlist
+levelTime = 0
+spawnListCounter = 0
+
 screen.blit(background, (0,0))
 pygame.display.update()
+
+def setLevelEntities():
+    global spawnListCounter
+    if spawnListCounter < len(spawnlist):
+        c = spawnlist[spawnListCounter]
+        if levelTime > c[0]:
+            entityList.append(c[1])
+            spawnListCounter+=1
+
+
 while True:
     #if len(bulletList) > 20:
         #bulletList = []
     timePassed = fpsClock.tick(FPS)
+    levelTime+=timePassed
     update_list = []
+    setLevelEntities()
     debugFramesText()
     event()
     entityUpdate()

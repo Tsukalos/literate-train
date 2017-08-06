@@ -10,6 +10,7 @@ class Entity():
         self.animationTimer = 0
         self.name = ""
         self.mask = mask
+        self.currentTile = 0
 
     def clearBg(self, update_list, screen, background):
         screen.blit(background,self.rect,self.rect)
@@ -48,7 +49,6 @@ class Entity():
     	self.surface = sprite
     	self.animationTime = animationTime
     	self.tileSize = tileSize
-    	self.currentTile = 0
 
     def draw(self,update_list, screen):
         screen.blit(self.surface,self.rect,Rect(self.currentTile*self.tileSize,0,self.tileSize,self.tileSize))
@@ -56,5 +56,5 @@ class Entity():
             screen.blit(self.hitboxsurface, self.hitbox)
         r = self.rect.copy()
         r.h += 5
-        r.w += 5
+        r.w += 2
         update_list.append(r)

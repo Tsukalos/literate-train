@@ -4,9 +4,11 @@ from collections import namedtuple
 import bulletpattern
 
 class Enemy(Entity):
-	def __init__(self, rect, surf, mask):
+	def __init__(self, rect, surf, mask, tileSize, animationInterval):
 		Entity.__init__(self, rect, surf, mask)
-		self.hp = 0
+		self.tileSize = tileSize
+		if animationInterval != None:
+			self.animationTime = animationInterval
 		#self.pattern = pattern.patternSquare(self)
 		#self.pattern = pattern.Pattern3(self)
 		#self.bulletPattern = bulletpattern.Pattern2()

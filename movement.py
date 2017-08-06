@@ -41,5 +41,27 @@ class Line():
 		entity.x += self.direction.x*self.speed
 		entity.y += self.direction.y*self.speed
 
+class Circle1FullTurn():
+	def __init__(self, radius, isClockwise, speed):
+		self.radius = radius
+		self.isClockwise = isClockwise
+		self.speed = speed
+		self.timer = 0
+		self.timePassed = 0
+		self.ang = 0
+
+	def update(self, entity):
+		#self.timer+=1
+		#if self.timePassed >= 100:
+		self.ang+=2*math.pi/100
+		if self.ang >= round(2*math.pi):
+				return False
+		entity.x += math.cos(self.ang)*self.radius
+		entity.y += math.sin(self.ang)*self.radius
+		
+		return True
+		
+	
+
 		
 		
