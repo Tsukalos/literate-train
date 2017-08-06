@@ -14,5 +14,5 @@ class Type1(Enemy):
                 )
         self.movementpattern = movementpattern
         self.movementpattern.setEntity(self)
-        self.loadEnemy(self.movementpattern, "Enemy1", bulletpattern.PatternSpiral4Origin(),1000)
+        self.loadEnemy(self.movementpattern, "Enemy1", bulletpattern.PatternSpiral4Origin(),50)
     

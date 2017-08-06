@@ -15,11 +15,9 @@ class Entity():
     def clearBg(self, update_list, screen, background):
         screen.blit(background,self.rect,self.rect)
         r = self.rect.copy()
-        r.w +=5
-        r.h +=5
+        r.h += 5
+        r.w += 2
         update_list.append(r)
-        del r
-        return
 
     def updateAction():
     	return

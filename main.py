@@ -41,6 +41,7 @@ p.loadSprite(pSprite,21,250) #animation
 #e.loadEnemy(movementpattern.PatternStill(e), "Enemy1", bulletpattern.Pattern3(),1000)
 
 background = pygame.image.load("data/background.png").convert()
+background.set_colorkey((255,255,255))
 
 entityList = []
 bulletList = []
@@ -117,7 +118,7 @@ def clearNameBg(a):
     r.y = a.y - 12
     r.w += 4
     r.h += 4
-    screen.blit(background,r)
+    screen.blit(background,r,r)
     update_list.append(r)
 
 def debugNameCaptions():
@@ -128,7 +129,8 @@ def debugNameCaptions():
             txt = a.name
         t = f.render(txt)
         s = t[0]
-        s.convert()
+        s.convert_alpha()
+        s.set_colorkey((255,255,255))
         r = t[1]
         r.x = a.x
         r.y = a.y - 11
