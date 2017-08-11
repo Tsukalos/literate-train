@@ -18,7 +18,7 @@ entityCounter = Text(freetype.SysFont("Lucida Console ", 15, 1, 0))
 dps = Text(freetype.SysFont("Lucida Console ", 15, 1,))
 FPS = 60
 fpsClock = pygame.time.Clock()
-screen = pygame.display.set_mode((800, 600), 0, 32)
+screen = pygame.display.set_mode((800, 600))
 update_list = []
 keypress = []
 
@@ -26,7 +26,8 @@ enableCollision = False
 import level
 loadedEffects = [
     pygame.image.load("data/effect1.png").convert_alpha(),
-    pygame.image.load("data/effect2.png").convert_alpha()
+    pygame.image.load("data/effect2.png").convert_alpha(),
+    pygame.image.load("data/effect12.png").convert_alpha()
 ]
 
 pSprite = pygame.image.load("data/test.png").convert()
@@ -153,7 +154,7 @@ def updateDamage():
         if(type(a) == Enemy or issubclass(type(a),Enemy)):
             if a.hp < 0:
                 a.clearBg(update_list,screen,background)
-                s = loadedEffects[0]
+                s = loadedEffects[2]
                 effectList.append(EffectSimpleSprite(a.rect,False,s,400,Rect(0,0,s.get_height(),s.get_height())))
                 entityList.remove(a)
             else:
