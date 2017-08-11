@@ -30,26 +30,41 @@ class Player(Entity):
     def updateMovement(self, keypress):
         if keypress[K_LSHIFT]:
             self.focus = True
-            mov = 1
+            mov = 1.5
         else:
             self.focus = False
-            mov = 3
-        if keypress[K_UP]:
-            self.y -= mov
-        if keypress[K_LEFT]:
-            self.x -= mov
-        if keypress[K_DOWN]:
-            self.y += mov
-        if keypress[K_RIGHT]:
-            self.x += mov
+            mov = 4
 
-        if keypress[K_z]:
-            self.firing = True
-        else:
-            self.firing = False
+        if self.inPlayArea():    
+            if keypress[K_UP]:
+                self.y -= mov
+            if keypress[K_LEFT]:
+                self.x -= mov
+            if keypress[K_DOWN]:
+                self.y += mov
+            if keypress[K_RIGHT]:
+                self.x += mov
 
+            if keypress[K_z]:
+                self.firing = True
+            else:
+                self.firing = False
         
+            self.correctPlayArea()
+
 
     def updateFiring(self):
         return self.firingpattern.update(self, self.timePassed)
         pass
+
+    def inPlayArea(self):
+        area = Rect(50,20,450,560)
+        if area.contains(self.rect):
+            return True
+        return False
+
+    def correctPlayArea(self):
+        if self.x < 50: self.x = 50
+        if self.y + self.rect.h > 580: self.y = 580 - self.rect.h
+        if self.y < 20: self.y = 20
+        if self.x + self.rect.w > 500: self.x = 500 - self.rect.w
