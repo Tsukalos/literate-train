@@ -11,14 +11,16 @@ from effect import *
 
 pygame.init()
 freetype.init()
-
 f = freetype.SysFont("Lucida Console", 14, 0, 0)
-fpsText = Text(freetype.SysFont("Lucida Console ", 15, 1, 0)) 
+fpsText = Text(freetype.SysFont("Lucida Console ", 15, 1, 0))
 entityCounter = Text(freetype.SysFont("Lucida Console ", 15, 1, 0))
 dps = Text(freetype.SysFont("Lucida Console ", 15, 1,))
 FPS = 60
 fpsClock = pygame.time.Clock()
-screen = pygame.display.set_mode((800, 600))
+screenDis = pygame.display.set_mode((800, 600))
+playArea = Rect(50,20,450,560)
+ui = pygame.image.load("data/playareaOverlay.png").convert_alpha()
+screen = pygame.Surface((450,560))
 update_list = []
 keypress = []
 
@@ -41,8 +43,8 @@ p.loadSprite(pSprite,21,250) #animation
 
 #e.loadEnemy(movementpattern.PatternStill(e), "Enemy1", bulletpattern.Pattern3(),1000)
 
-background = pygame.image.load("data/background.png").convert()
-background.set_colorkey((255,255,255))
+#background = pygame.image.load("data/playArea.png").convert()
+#background.set_colorkey((255,255,255))
 
 entityList = []
 bulletList = []
@@ -95,15 +97,15 @@ def debugFramesText():
     global dmg
     fpstime = fpsClock.get_fps()
     entityc = len(bulletList+pbulletList)
-    entityCounter.clearBg(update_list, screen, background)
-    fpsText.clearBg(update_list,screen,background)
-    dps.clearBg(update_list,screen,background)
-    dps.update(str(int(dmg/timePassed*100)), Rect(150,10,0,0))
-    entityCounter.update(str(entityc),Rect(50,10,0,0))
-    fpsText.update(str(int(fpstime)),Rect(10,10,0,0))
-    entityCounter.draw(update_list, screen)
-    fpsText.draw(update_list,screen)
-    dps.draw(update_list,screen)
+    entityCounter.clearBg(update_list, screenDis, ui)
+    fpsText.clearBg(update_list,screenDis,ui)
+    dps.clearBg(update_list,screenDis,ui)
+    dps.update(str(int(dmg/timePassed*100)), Rect(700,570,0,0))
+    entityCounter.update(str(entityc),Rect(650,570,0,0))
+    fpsText.update(str(int(fpstime)),Rect(600,570,0,0))
+    entityCounter.draw(update_list, screenDis)
+    fpsText.draw(update_list,screenDis)
+    dps.draw(update_list,screenDis)
     dmg = 0
     
 
@@ -200,13 +202,14 @@ def effectDraw():
         e.draw(update_list, screen)
 
 
-
-background = level.Level1.background
+background = pygame.surface.Surface((450,560))
+background.blit(level.Level1.background, (0,0), Rect(0,5040,450,560))
 spawnlist = level.Level1.spawnlist
 levelTime = 0
 spawnListCounter = 0
 
-screen.blit(background, (0,0))
+screen.blit(background,(0,0))
+screenDis.blit(ui,(0,0))
 pygame.display.update()
 
 def setLevelEntities():
@@ -218,12 +221,19 @@ def setLevelEntities():
             spawnListCounter+=1
 
 
+timesc = 0
+aaa = 0
 while True:
     #if len(bulletList) > 20:
         #bulletList = []
     timePassed = fpsClock.tick(FPS)
     levelTime+=timePassed
-    update_list = []
+    timesc += timePassed
+    if timesc > 20:
+        aaa +=1
+        background.blit(level.Level1.background, (0,0), Rect(0,5040-aaa*1,450,560))
+        screen.blit(background,(0,0))
+        timesc = 0
     setLevelEntities()
     debugFramesText()
     event()
@@ -233,4 +243,8 @@ while True:
     updateDamage()
     despawnEntities()
     debugNameCaptions()
+    update_list = []
+    update_list.append(playArea)
+    screenDis.blit(screen, playArea)
     pygame.display.update(update_list)
+    

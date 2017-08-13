@@ -8,4 +8,4 @@ class Level1():
     ]
     for i in range(0,6):
         spawnlist.append((1000 + i*500, enemylist.Type1((-30,100),movementpattern.PatternCircle())))
-    background = pygame.image.load("data/background.png").convert()
+    background = pygame.image.load("data/level1bg.png").convert()

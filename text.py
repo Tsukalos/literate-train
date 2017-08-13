@@ -8,6 +8,7 @@ class Text(Entity):
         r = rect.Rect(0,0,0,0)
         Entity.__init__(self, r, surf, None)
         self.font = font
+        self.font.fgcolor = (255,255,255,255)
         self.txt = ""
     
     def setText(self, txt):

@@ -58,13 +58,13 @@ class Player(Entity):
         pass
 
     def inPlayArea(self):
-        area = Rect(50,20,450,560)
+        area = Rect(0,0,450,560)
         if area.contains(self.rect):
             return True
         return False
 
     def correctPlayArea(self):
-        if self.x < 50: self.x = 50
-        if self.y + self.rect.h > 580: self.y = 580 - self.rect.h
-        if self.y < 20: self.y = 20
-        if self.x + self.rect.w > 500: self.x = 500 - self.rect.w
+        if self.x < 0: self.x = 0
+        if self.y + self.rect.h > 560: self.y = 560 - self.rect.h
+        if self.y < 0: self.y = 0
+        if self.x + self.rect.w > 450: self.x = 450 - self.rect.w
